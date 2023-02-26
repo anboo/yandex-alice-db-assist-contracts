@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package yandex_alice.db_assist;
+
+option go_package = ".;yandex_alice_db_assist";
+
+import "google/protobuf/struct.proto";
+
+service ProxyDatabase {
+  rpc StartAuthorization(StartAuthorizationRequest) returns (StartAuthorizationResponse);
+  rpc ConfirmAuthorization(ConfirmAuthorizationRequest) returns (ConfirmAuthorizationResponse);
+  rpc RunQuery(RunQueryRequest) returns (RunQueryResponse);
+}
+
+message StartAuthorizationRequest {
+  string reference_token = 1;
+}
+
+message StartAuthorizationResponse {
+  string session_id = 1;
+}
+
+message ConfirmAuthorizationRequest {
+  string session_id = 1;
+  string code = 2;
+}
+
+message ConfirmAuthorizationResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string expires_in = 3;
+}
+
+message RunQueryRequest {
+  string access_token = 1;
+  string query = 2;
+  string expected_result_type = 3;
+}
+
+message RunQueryResponse {
+  google.protobuf.Struct result = 1;
+}
